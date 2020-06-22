@@ -1,0 +1,20 @@
+plugins {
+    // Apply the java-library plugin to add support for Java Library
+    id 'java-library'
+}
+
+repositories {
+    // Use jcenter for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    jcenter()
+}
+
+dependencies {
+    implementation 'net.openhft:compiler:2.3.5'
+    implementation 'com.google.guava:guava:26.0-jre'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+}
