@@ -16,6 +16,25 @@ public abstract class AbstractObjectProperty<ObjectT> implements ObjectProperty<
         this.uniqueIdentifier = uniqueIdentifier;
     }
 
+    protected void throwIfNotAccessible(final ObjectT bean, final boolean readable) {
+        if (bean == null) {
+            throw new NullPointerException("bean");
+        }
+
+        final boolean accessible;
+        final String accessName;
+        if (readable) {
+            accessible = isReadable();
+            accessName = "readable";
+        } else {
+            accessible = isWritable();
+            accessName = "writable";
+        }
+        if (!accessible) {
+            throw new UnsupportedOperationException(String.format("'%s' of '%s' is not %s", getUniqueIdentifier(), getObjectType().getName(), accessName));
+        }
+    }
+
     @Override
     public Class<?> getObjectType() {
         return objectType;

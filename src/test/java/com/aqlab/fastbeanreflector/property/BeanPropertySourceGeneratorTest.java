@@ -1,4 +1,4 @@
-package com.aqlab.fastbeanreflector.factory;
+package com.aqlab.fastbeanreflector.property;
 
 
 import net.openhft.compiler.CompilerUtils;
@@ -53,7 +53,7 @@ public class BeanPropertySourceGeneratorTest {
     public void testObjectPropertyTypeString() throws IntrospectionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         final BeanPropertySourceGenerator generator = new BeanPropertySourceGenerator(TestClass.class, new PropertyDescriptor("f1", TestClass.class));
         generator.generateClassSource();
-        final Class<?> clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(generator.getTargetClassName(), generator.getTargetClassSource());
+        final Class<?> clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(generator.getTargetClassFullName(), generator.getTargetClassSource());
         Assert.assertNotNull(clazz.newInstance());
     }
 
@@ -61,7 +61,7 @@ public class BeanPropertySourceGeneratorTest {
     public void testObjectPropertyTypeIntArray() throws IntrospectionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         final BeanPropertySourceGenerator generator = new BeanPropertySourceGenerator(TestClass.class, new PropertyDescriptor("f2", TestClass.class));
         generator.generateClassSource();
-        final Class<?> clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(generator.getTargetClassName(), generator.getTargetClassSource());
+        final Class<?> clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(generator.getTargetClassFullName(), generator.getTargetClassSource());
         Assert.assertNotNull(clazz.newInstance());
     }
 
@@ -69,7 +69,7 @@ public class BeanPropertySourceGeneratorTest {
     public void testObjectPropertyTypeListOfLong() throws IntrospectionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         final BeanPropertySourceGenerator generator = new BeanPropertySourceGenerator(TestClass.class, new PropertyDescriptor("f3", TestClass.class));
         generator.generateClassSource();
-        final Class<?> clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(generator.getTargetClassName(), generator.getTargetClassSource());
+        final Class<?> clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(generator.getTargetClassFullName(), generator.getTargetClassSource());
         Assert.assertNotNull(clazz.newInstance());
     }
 
@@ -77,7 +77,7 @@ public class BeanPropertySourceGeneratorTest {
     public void testObjectPropertyTypePrimitiveByte() throws IntrospectionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         final BeanPropertySourceGenerator generator = new BeanPropertySourceGenerator(TestClass.class, new PropertyDescriptor("f4", TestClass.class));
         generator.generateClassSource();
-        final Class<?> clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(generator.getTargetClassName(), generator.getTargetClassSource());
+        final Class<?> clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(generator.getTargetClassFullName(), generator.getTargetClassSource());
         Assert.assertNotNull(clazz.newInstance());
     }
 
@@ -85,7 +85,7 @@ public class BeanPropertySourceGeneratorTest {
     public void testObjectPropertyGetClass() throws IntrospectionException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         final BeanPropertySourceGenerator generator = new BeanPropertySourceGenerator(TestClass.class, new PropertyDescriptor("class", TestClass.class, "getClass", null));
         generator.generateClassSource();
-        final Class<?> clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(generator.getTargetClassName(), generator.getTargetClassSource());
+        final Class<?> clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(generator.getTargetClassFullName(), generator.getTargetClassSource());
         Assert.assertNotNull(clazz.newInstance());
     }
 }

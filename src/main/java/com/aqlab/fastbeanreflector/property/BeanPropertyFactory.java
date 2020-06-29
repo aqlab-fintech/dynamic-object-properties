@@ -1,6 +1,5 @@
-package com.aqlab.fastbeanreflector.factory;
+package com.aqlab.fastbeanreflector.property;
 
-import com.aqlab.fastbeanreflector.property.BeanProperty;
 import net.openhft.compiler.CompilerUtils;
 
 import java.beans.BeanInfo;
@@ -84,7 +83,7 @@ public class BeanPropertyFactory {
             throws IllegalAccessException, InstantiationException, ClassNotFoundException {
         final BeanPropertySourceGenerator generator = new BeanPropertySourceGenerator(objectType, pd);
         generator.generateClassSource();
-        final Class<?> clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(generator.getTargetClassName(), generator.getTargetClassSource());
+        final Class<?> clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(generator.getTargetClassFullName(), generator.getTargetClassSource());
         propertiesMap.put(pd.getName(), (BeanProperty<?>) clazz.newInstance());
     }
 }

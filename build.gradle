@@ -18,3 +18,9 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
+
+javadoc {
+    dependsOn build
+    source = sourceSets.main.allJava
+    classpath = configurations.compile
+}

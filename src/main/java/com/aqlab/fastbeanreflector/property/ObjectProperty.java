@@ -9,6 +9,10 @@ public interface ObjectProperty<ObjectT> {
         throw new UnsupportedOperationException(String.format("%s: value is not a byte", getUniqueIdentifier()));
     }
 
+    default char getChar(final ObjectT bean) {
+        throw new UnsupportedOperationException(String.format("%s: value is not a char", getUniqueIdentifier()));
+    }
+
     default short getShort(final ObjectT bean) {
         throw new UnsupportedOperationException(String.format("%s: value is not a short", getUniqueIdentifier()));
     }
@@ -39,6 +43,10 @@ public interface ObjectProperty<ObjectT> {
 
     default void setByte(final ObjectT bean, final byte value) {
         throw new UnsupportedOperationException(String.format("%s: value is not a byte", getUniqueIdentifier()));
+    }
+
+    default void setChar(final ObjectT bean, final char value) {
+        throw new UnsupportedOperationException(String.format("%s: value is not a char", getUniqueIdentifier()));
     }
 
     default void setShort(final ObjectT bean, final short value) {

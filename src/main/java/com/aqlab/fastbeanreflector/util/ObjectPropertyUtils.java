@@ -1,6 +1,6 @@
 package com.aqlab.fastbeanreflector.util;
 
-import com.aqlab.fastbeanreflector.factory.BeanPropertyFactory;
+import com.aqlab.fastbeanreflector.property.BeanPropertyFactory;
 import com.aqlab.fastbeanreflector.property.ObjectProperty;
 
 import java.util.Collection;

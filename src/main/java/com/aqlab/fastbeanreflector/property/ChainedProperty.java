@@ -43,17 +43,92 @@ public class ChainedProperty<ObjectT> extends ObjectPropertyWithDependencies<Obj
 
     @Override
     public <ValueT> ValueT get(final ObjectT bean) {
-        final Object o = getLastTargetObject(bean);
-        if (o == null) {
-            return null;
-        }
+        return lastProperty.cast().get(getLastTargetObject(bean));
+    }
 
-        return lastProperty.cast().get(o);
+    @Override
+    public byte getByte(final ObjectT bean) {
+        return lastProperty.cast().getByte(getLastTargetObject(bean));
+    }
+
+    @Override
+    public char getChar(final ObjectT bean) {
+        return 0;
+    }
+
+    @Override
+    public short getShort(final ObjectT bean) {
+        return 0;
+    }
+
+    @Override
+    public int getInt(final ObjectT bean) {
+        return 0;
+    }
+
+    @Override
+    public long getLong(final ObjectT bean) {
+        return 0;
+    }
+
+    @Override
+    public float getFloat(final ObjectT bean) {
+        return 0;
+    }
+
+    @Override
+    public double getDouble(final ObjectT bean) {
+        return 0;
+    }
+
+    @Override
+    public boolean getBoolean(final ObjectT bean) {
+        return false;
     }
 
     @Override
     public void set(final ObjectT bean, final Object value) {
         lastProperty.cast().set(getLastTargetObject(bean), value);
+    }
+
+    @Override
+    public void setByte(final ObjectT bean, final byte value) {
+
+    }
+
+    @Override
+    public void setChar(final ObjectT bean, final char value) {
+
+    }
+
+    @Override
+    public void setShort(final ObjectT bean, final short value) {
+
+    }
+
+    @Override
+    public void setInt(final ObjectT bean, final int value) {
+
+    }
+
+    @Override
+    public void setLong(final ObjectT bean, final long value) {
+
+    }
+
+    @Override
+    public void setFloat(final ObjectT bean, final float value) {
+
+    }
+
+    @Override
+    public void setDouble(final ObjectT bean, final double value) {
+
+    }
+
+    @Override
+    public void setBoolean(final ObjectT bean, final boolean value) {
+
     }
 
     private Object getLastTargetObject(final Object bean) {

@@ -9,6 +9,7 @@ public class BeanPropertyTest {
         private byte f2 = 9;
         private TestClass f3;
         private Double f4;
+        private char f5;
 
         public int getF1() {
             return f1;
@@ -32,6 +33,14 @@ public class BeanPropertyTest {
 
         public void setF4(final Double f4) {
             this.f4 = f4;
+        }
+
+        public char getF5() {
+            return f5;
+        }
+
+        public void setF5(final char f5) {
+            this.f5 = f5;
         }
     }
 
@@ -106,5 +115,13 @@ public class BeanPropertyTest {
         Assert.assertEquals("f4", property.getUniqueIdentifier());
         Assert.assertTrue(!property.isReadable());
         Assert.assertTrue(property.isWritable());
+    }
+
+    @Test
+    public void testTestClassCharGetterSetter() {
+        final BeanProperty<TestClass> property = BeanProperty.FACTORY.getBeanProperty(TestClass.class, "f5");
+        final TestClass instance = new TestClass();
+        property.set(instance, 'c');
+        Assert.assertEquals(instance.getF5(), property.getChar(instance));
     }
 }
