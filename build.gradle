@@ -1,12 +1,22 @@
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
+    id 'maven-publish'
 }
 
 repositories {
     // Use jcenter for resolving your dependencies.
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
+}
+
+sourceSets {
+    examples {
+        java {
+            compileClasspath += main.output + main.compileClasspath
+            runtimeClasspath += compileClasspath
+        }
+    }
 }
 
 dependencies {
@@ -19,8 +29,14 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 }
 
-javadoc {
-    dependsOn build
-    source = sourceSets.main.allJava
-    classpath = configurations.compile
+java {
+    withSourcesJar()
+    withJavadocJar()
 }
+
+javadoc {
+    source = sourceSets.main.allJava
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+
