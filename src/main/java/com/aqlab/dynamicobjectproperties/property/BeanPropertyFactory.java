@@ -128,7 +128,7 @@ public class BeanPropertyFactory {
     private static Class<?> compileClass(final String className, final String source) throws ClassNotFoundException, IOException {
         final File sourceFile = new File(GENERATED_SOURCE_ROOT, className.replace('.', File.separatorChar) + ".java");
         sourceFile.getParentFile().mkdirs();
-        Files.writeString(sourceFile.toPath(), source);
+        Files.write(sourceFile.toPath(), source.getBytes());
 
         try (final ByteArrayOutputStream sout = new ByteArrayOutputStream();
              final ByteArrayOutputStream serr = new ByteArrayOutputStream()) {
