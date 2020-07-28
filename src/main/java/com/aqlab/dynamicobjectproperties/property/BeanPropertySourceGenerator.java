@@ -11,7 +11,7 @@ public class BeanPropertySourceGenerator {
             "public class %s extends " + BeanProperty.class.getName() + "<%s> {\n\n" +
             "\tprivate static final %s.Getter<%s> STATIC_GETTER = %s;\n" +
             "\tprivate static final %s.Setter<%s> STATIC_SETTER = %s;\n\n" +
-            "\t%s() {\n" +
+            "\tpublic %s() {\n" +
             "\t\tsuper(FunctionalPropertyFactory.createFunctionalProperty%s(%s.class, %s\"%s\", STATIC_GETTER, STATIC_SETTER), \"%s\");\n" +
             "\t}\n" +
             "}\n";
@@ -49,22 +49,22 @@ public class BeanPropertySourceGenerator {
 
     private String buildObjectClassShortName() {
         final String objectPackageNameHash = "H" + Hashing.sha256()
-                .hashString(objectType.getPackage().getName(), Charsets.UTF_8)
+                .hashString(objectType.getName(), Charsets.UTF_8)
                 .toString().substring(0, 12).toUpperCase();
-        final String[] objectPackageNames = objectType.getPackage().getName().split("\\.");
+        final String[] objectPackageNames = objectType.getName().split("\\.");
         final StringBuilder objectClassShortNameBuilder = new StringBuilder();
         objectClassShortNameBuilder.append(objectPackageNameHash).append('.');
-        for (int i = 0; i < objectPackageNames.length - 1; i++) {
+        for (int i = 0; i < objectPackageNames.length - 2; i++) {
             objectClassShortNameBuilder.append(objectPackageNames[i].charAt(0));
         }
         if (objectPackageNames.length > 0) {
             if (objectPackageNames.length > 1) {
                 objectClassShortNameBuilder.append('.');
             }
-            objectClassShortNameBuilder.append(objectPackageNames[objectPackageNames.length - 1]);
+            objectClassShortNameBuilder.append(objectPackageNames[objectPackageNames.length - 2]);
             objectClassShortNameBuilder.append('.');
         }
-        objectClassShortNameBuilder.append(objectType.getSimpleName());
+        objectClassShortNameBuilder.append(objectPackageNames[objectPackageNames.length - 1]);
         return objectClassShortNameBuilder.toString();
     }
 

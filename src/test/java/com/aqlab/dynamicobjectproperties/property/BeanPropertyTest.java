@@ -4,9 +4,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class BeanPropertyTest {
-    public class TestClass {
+    public static class TestClass {
         private int f1;
-        private byte f2 = 9;
+        private final byte f2 = 9;
         private TestClass f3;
         private Double f4;
         private char f5;

@@ -1,11 +1,23 @@
 package com.aqlab.dynamicobjectproperties.property;
 
-import net.openhft.compiler.CompilerUtils;
+import com.google.common.base.Charsets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Files;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,7 +44,23 @@ public class BeanPropertyFactory {
      */
     public static final BeanPropertyFactory INSTANCE = new BeanPropertyFactory();
 
-    private Map<Class<?>, Map<String, BeanProperty<?>>> propertiesByClass = new ConcurrentHashMap<>();
+    private static final Logger LOGGER = LoggerFactory.getLogger(BeanPropertyFactory.class);
+
+    private static final JavaCompiler CACHED_COMPILER = ToolProvider.getSystemJavaCompiler();
+    static URLClassLoader GENERATED_CLASSES_LOADER;
+    private static File GENERATED_SOURCE_ROOT;
+
+    static {
+        try {
+            GENERATED_SOURCE_ROOT = Files.createTempDirectory(BeanPropertyFactory.class.getName()).toFile();
+            GENERATED_CLASSES_LOADER = URLClassLoader.newInstance(new URL[]{GENERATED_SOURCE_ROOT.toURI().toURL()},
+                    BeanPropertyFactory.class.getClassLoader());
+        } catch (final IOException e) {
+            LOGGER.error("Unexpected exception initializing temp directory", e);
+        }
+    }
+
+    private final Map<Class<?>, Map<String, BeanProperty<?>>> propertiesByClass = new ConcurrentHashMap<>();
 
     private BeanPropertyFactory() {
     }
@@ -97,6 +125,24 @@ public class BeanPropertyFactory {
         return allBeanProperties.stream().filter(filter).collect(Collectors.toList());
     }
 
+    private static Class<?> compileClass(final String className, final String source) throws ClassNotFoundException, IOException {
+        final File sourceFile = new File(GENERATED_SOURCE_ROOT, className.replace('.', File.separatorChar) + ".java");
+        sourceFile.getParentFile().mkdirs();
+        Files.writeString(sourceFile.toPath(), source);
+
+        try (final ByteArrayOutputStream sout = new ByteArrayOutputStream();
+             final ByteArrayOutputStream serr = new ByteArrayOutputStream()) {
+            if (CACHED_COMPILER.run(null, sout, serr, sourceFile.getPath()) != 0) {
+                sout.flush();
+                serr.flush();
+                LOGGER.info(new String(sout.toByteArray(), Charsets.UTF_8));
+                LOGGER.error(new String(serr.toByteArray(), Charsets.UTF_8));
+            }
+        }
+
+        return Class.forName(className, true, GENERATED_CLASSES_LOADER);
+    }
+
     /**
      * Create instances of {@link com.aqlab.dynamicobjectproperties.property.BeanProperty} for all bean properties specified.
      * <p>
@@ -123,7 +169,7 @@ public class BeanPropertyFactory {
                         Stream.of(beanInfo.getPropertyDescriptors()).forEach(pd -> {
                             try {
                                 registerBeanProperty(k, pd, propertiesMap);
-                            } catch (final IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+                            } catch (final IllegalAccessException | InstantiationException | ClassNotFoundException | IOException | NoSuchMethodException | InvocationTargetException e) {
                                 throw new RuntimeException("Unexpected error instantiating BeanProperty", e);
                             }
                         });
@@ -144,10 +190,13 @@ public class BeanPropertyFactory {
     }
 
     private void registerBeanProperty(final Class<?> objectType, final PropertyDescriptor pd, final Map<String, BeanProperty<?>> propertiesMap)
-            throws IllegalAccessException, InstantiationException, ClassNotFoundException {
+            throws ClassNotFoundException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         final BeanPropertySourceGenerator generator = new BeanPropertySourceGenerator(objectType, pd);
         generator.generateClassSource();
-        final Class<?> clazz = CompilerUtils.CACHED_COMPILER.loadFromJava(generator.getTargetClassFullName(), generator.getTargetClassSource());
-        propertiesMap.put(pd.getName(), (BeanProperty<?>) clazz.newInstance());
+        final Class<?> clazz = compileClass(generator.getTargetClassFullName(), generator.getTargetClassSource());
+        if (clazz != null) {
+            final Constructor<?> constructor = clazz.getConstructor();
+            propertiesMap.put(pd.getName(), (BeanProperty<?>) constructor.newInstance());
+        }
     }
 }
