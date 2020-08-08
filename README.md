@@ -2,6 +2,7 @@
 ## What is this?
 Dynamic Object Properties (DOP) extends the concept of object properties beyond Java bean properties.
 
+#### An Example
 ````
 public class FirstExampleMain {
     // a data class
@@ -49,6 +50,7 @@ public class FirstExampleMain {
 }
 ````
 
+#### Encapsulation
 One can implement the above as ObjectProperty instances. An ObjectProperty encapsulates
 * a getter and/or a setter
 * the class of the object this property is defined on top of
@@ -60,17 +62,17 @@ And this allows reflection-like operations like
 * get or set a property by name
 * filter properties by the class of the value...
 
-In the scenario where
+DOP's ObjectProperty encapsulation unifies Java bean and derived properties and thus making your code cleaner. Scenarios are
 * developers do not have the control of the definition
   * managed by a different team
   * vendor application
   * JDK classes (YES!!)
 * the getter and setter logic is repeated everywhere / defined as static utility method
 
-DOP's ObjectProperty encapsulation unifies Java bean and derived properties and thus making your code cleaner.
-
+#### Reflection-free
 As the whole idea starts from avoiding reflection overhead and boosting latency-sensitive application's performance, DOP is **reflection-free** after initialization. (`BeanProperty` does use reflection when an instance is created)
 
+#### Implementations
 Specialized `ObjectProperty` types defined in this library include
 1. `FunctionalProperty`
 1. `BeanProperty`
