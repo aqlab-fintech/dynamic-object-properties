@@ -31,7 +31,7 @@ public class DateFormatExamplesMain {
         dateTimeList.add(new AtomicReference<>(LocalDateTime.of(2012, 3, 18, 4, 16).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
         dateTimeList.add(new AtomicReference<>(LocalDateTime.of(2025, 12, 31, 5, 59).format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)));
 
-        final ObjectProperty<AtomicReference<String>> parseProperty = FunctionalPropertyFactory.<AtomicReference<String>>createFunctionalPropertyObjectValue(String.class, LocalDateTime.class, "!FUNC::parse",
+        final ObjectProperty<AtomicReference<String>> parseProperty = FunctionalPropertyFactory.INSTANCE.<AtomicReference<String>>createFunctionalPropertyObjectValue(String.class, LocalDateTime.class, "!FUNC::parse",
                 s -> {
                     try {
                         return LocalDateTime.parse(s.get(), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
@@ -40,36 +40,36 @@ public class DateFormatExamplesMain {
                     }
                 }, null);
         final List<ObjectProperty<AtomicReference<String>>> propertyList = new ArrayList<>();
-        propertyList.add(FunctionalPropertyFactory.<AtomicReference<String>>createFunctionalPropertyObjectValue(
+        propertyList.add(FunctionalPropertyFactory.INSTANCE.<AtomicReference<String>>createFunctionalPropertyObjectValue(
                 AtomicReference.class, String.class, "!FUNC::deref", ref -> ref.get(), (ref, s) -> ref.set((String) s)));
         propertyList.add(ChainedProperty.create(
                 parseProperty,
-                FunctionalPropertyFactory.createFunctionalPropertyIntValue(
+                FunctionalPropertyFactory.INSTANCE.createFunctionalPropertyIntValue(
                         LocalDateTime.class, "!FUNC::year", LocalDateTime::getYear, null)
         ));
         propertyList.add(ChainedProperty.create(
                 parseProperty,
-                FunctionalPropertyFactory.createFunctionalPropertyIntValue(
+                FunctionalPropertyFactory.INSTANCE.createFunctionalPropertyIntValue(
                         LocalDateTime.class, "!FUNC::month", LocalDateTime::getMonthValue, null)
         ));
         propertyList.add(ChainedProperty.create(
                 parseProperty,
-                FunctionalPropertyFactory.createFunctionalPropertyIntValue(
+                FunctionalPropertyFactory.INSTANCE.createFunctionalPropertyIntValue(
                         LocalDateTime.class, "!FUNC::day", LocalDateTime::getDayOfMonth, null)
         ));
         propertyList.add(ChainedProperty.create(
                 parseProperty,
-                FunctionalPropertyFactory.<LocalDateTime, DayOfWeek>createFunctionalPropertyObjectValue(
+                FunctionalPropertyFactory.INSTANCE.<LocalDateTime, DayOfWeek>createFunctionalPropertyObjectValue(
                         LocalDateTime.class, DayOfWeek.class, "!FUNC::dayOfWeek", LocalDateTime::getDayOfWeek, null)
         ));
         propertyList.add(ChainedProperty.create(
                 parseProperty,
-                FunctionalPropertyFactory.<LocalDateTime>createFunctionalPropertyObjectValue(
+                FunctionalPropertyFactory.INSTANCE.<LocalDateTime>createFunctionalPropertyObjectValue(
                         LocalDateTime.class, String.class, "!FUNC::dateOnlyFormat", dt -> dt.format(DateTimeFormatter.ISO_LOCAL_DATE), null)
         ));
         propertyList.add(ChainedProperty.create(
                 parseProperty,
-                FunctionalPropertyFactory.<LocalDateTime>createFunctionalPropertyObjectValue(
+                FunctionalPropertyFactory.INSTANCE.<LocalDateTime>createFunctionalPropertyObjectValue(
                         LocalDateTime.class, String.class, "!FUNC::timeOnlyFormat", dt -> dt.format(DateTimeFormatter.ISO_TIME), null)
         ));
 

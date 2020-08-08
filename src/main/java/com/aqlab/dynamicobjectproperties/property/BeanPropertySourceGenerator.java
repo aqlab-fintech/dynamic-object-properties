@@ -12,7 +12,7 @@ public class BeanPropertySourceGenerator {
             "\tprivate static final %s.Getter<%s> STATIC_GETTER = %s;\n" +
             "\tprivate static final %s.Setter<%s> STATIC_SETTER = %s;\n\n" +
             "\tpublic %s() {\n" +
-            "\t\tsuper(FunctionalPropertyFactory.createFunctionalProperty%s(%s.class, %s\"%s\", STATIC_GETTER, STATIC_SETTER), \"%s\");\n" +
+            "\t\tsuper(FunctionalPropertyFactory.INSTANCE.createFunctionalProperty%s(%s.class, %s\"%s\", STATIC_GETTER, STATIC_SETTER), \"%s\");\n" +
             "\t}\n" +
             "}\n";
 

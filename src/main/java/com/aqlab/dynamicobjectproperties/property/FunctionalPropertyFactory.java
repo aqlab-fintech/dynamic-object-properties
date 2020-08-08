@@ -23,7 +23,7 @@ public final class FunctionalPropertyFactory {
      * @param <T>              the target object type generic argument
      * @return an instance of {@link FunctionalPropertyObjectValue}
      */
-    public static <T> FunctionalProperty<T> createFunctionalPropertyObjectValue(final Class<?> objectType, final Class<?> valueType, final String uniqueIdentifier, final FunctionalPropertyObjectValue.Getter<T> getter, final FunctionalPropertyObjectValue.Setter<T> setter) {
+    public <T> FunctionalProperty<T> createFunctionalPropertyObjectValue(final Class<?> objectType, final Class<?> valueType, final String uniqueIdentifier, final FunctionalPropertyObjectValue.Getter<T> getter, final FunctionalPropertyObjectValue.Setter<T> setter) {
         return new FunctionalPropertyObjectValue<>(objectType, valueType, uniqueIdentifier, getter, setter);
     }
 
@@ -39,7 +39,7 @@ public final class FunctionalPropertyFactory {
      * @param <V>              the expected value type generic argument
      * @return an instance of {@link FunctionalPropertyObjectValue}
      */
-    public static <T, V> FunctionalProperty<T> createFunctionalPropertyObjectValue(final Class<?> objectType, final Class<?> valueType, final String uniqueIdentifier, final Function<T, V> getter, final BiConsumer<T, V> setter) {
+    public <T, V> FunctionalProperty<T> createFunctionalPropertyObjectValue(final Class<?> objectType, final Class<?> valueType, final String uniqueIdentifier, final Function<T, V> getter, final BiConsumer<T, V> setter) {
         return new FunctionalPropertyObjectValue<>(objectType, valueType, uniqueIdentifier, getter == null ? null : FunctionalPropertyObjectValue.Getter.fromFunction(getter), setter == null ? null : FunctionalPropertyObjectValue.Setter.fromBiConsumer(setter));
     }
 
@@ -53,7 +53,7 @@ public final class FunctionalPropertyFactory {
      * @param <T>              the target object type generic argument
      * @return an instance of {@link FunctionalPropertyBooleanValue}
      */
-    public static <T> FunctionalProperty<T> createFunctionalPropertyBooleanValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyBooleanValue.Getter<T> getter, final FunctionalPropertyBooleanValue.Setter<T> setter) {
+    public <T> FunctionalProperty<T> createFunctionalPropertyBooleanValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyBooleanValue.Getter<T> getter, final FunctionalPropertyBooleanValue.Setter<T> setter) {
         return new FunctionalPropertyBooleanValue<>(objectType, uniqueIdentifier, getter, setter);
     }
 
@@ -67,7 +67,7 @@ public final class FunctionalPropertyFactory {
      * @param <T>              the target object type generic argument
      * @return an instance of {@link FunctionalPropertyByteValue}
      */
-    public static <T> FunctionalProperty<T> createFunctionalPropertyByteValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyByteValue.Getter<T> getter, final FunctionalPropertyByteValue.Setter<T> setter) {
+    public <T> FunctionalProperty<T> createFunctionalPropertyByteValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyByteValue.Getter<T> getter, final FunctionalPropertyByteValue.Setter<T> setter) {
         return new FunctionalPropertyByteValue<>(objectType, uniqueIdentifier, getter, setter);
     }
 
@@ -81,7 +81,7 @@ public final class FunctionalPropertyFactory {
      * @param <T>              the target object type generic argument
      * @return an instance of {@link FunctionalPropertyCharValue}
      */
-    public static <T> FunctionalProperty<T> createFunctionalPropertyCharValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyCharValue.Getter<T> getter, final FunctionalPropertyCharValue.Setter<T> setter) {
+    public <T> FunctionalProperty<T> createFunctionalPropertyCharValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyCharValue.Getter<T> getter, final FunctionalPropertyCharValue.Setter<T> setter) {
         return new FunctionalPropertyCharValue<>(objectType, uniqueIdentifier, getter, setter);
     }
 
@@ -95,7 +95,7 @@ public final class FunctionalPropertyFactory {
      * @param <T>              the target object type generic argument
      * @return an instance of {@link FunctionalPropertyDoubleValue}
      */
-    public static <T> FunctionalProperty<T> createFunctionalPropertyDoubleValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyDoubleValue.Getter<T> getter, final FunctionalPropertyDoubleValue.Setter<T> setter) {
+    public <T> FunctionalProperty<T> createFunctionalPropertyDoubleValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyDoubleValue.Getter<T> getter, final FunctionalPropertyDoubleValue.Setter<T> setter) {
         return new FunctionalPropertyDoubleValue<>(objectType, uniqueIdentifier, getter, setter);
     }
 
@@ -110,7 +110,7 @@ public final class FunctionalPropertyFactory {
      * @param <T>              the target object type generic argument
      * @return an instance of {@link FunctionalPropertyFloatValue}
      */
-    public static <T> FunctionalProperty<T> createFunctionalPropertyFloatValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyFloatValue.Getter<T> getter, final FunctionalPropertyFloatValue.Setter<T> setter) {
+    public <T> FunctionalProperty<T> createFunctionalPropertyFloatValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyFloatValue.Getter<T> getter, final FunctionalPropertyFloatValue.Setter<T> setter) {
         return new FunctionalPropertyFloatValue<>(objectType, uniqueIdentifier, getter, setter);
     }
 
@@ -125,7 +125,7 @@ public final class FunctionalPropertyFactory {
      * @param <T>              the target object type generic argument
      * @return an instance of {@link FunctionalPropertyIntValue}
      */
-    public static <T> FunctionalProperty<T> createFunctionalPropertyIntValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyIntValue.Getter<T> getter, final FunctionalPropertyIntValue.Setter<T> setter) {
+    public <T> FunctionalProperty<T> createFunctionalPropertyIntValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyIntValue.Getter<T> getter, final FunctionalPropertyIntValue.Setter<T> setter) {
         return new FunctionalPropertyIntValue<>(objectType, uniqueIdentifier, getter, setter);
     }
 
@@ -140,7 +140,7 @@ public final class FunctionalPropertyFactory {
      * @param <T>              the target object type generic argument
      * @return an instance of {@link FunctionalPropertyLongValue}
      */
-    public static <T> FunctionalProperty<T> createFunctionalPropertyLongValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyLongValue.Getter<T> getter, final FunctionalPropertyLongValue.Setter<T> setter) {
+    public <T> FunctionalProperty<T> createFunctionalPropertyLongValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyLongValue.Getter<T> getter, final FunctionalPropertyLongValue.Setter<T> setter) {
         return new FunctionalPropertyLongValue<>(objectType, uniqueIdentifier, getter, setter);
     }
 
@@ -155,7 +155,7 @@ public final class FunctionalPropertyFactory {
      * @param <T>              the target object type generic argument
      * @return an instance of {@link FunctionalPropertyShortValue}
      */
-    public static <T> FunctionalProperty<T> createFunctionalPropertyShortValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyShortValue.Getter<T> getter, final FunctionalPropertyShortValue.Setter<T> setter) {
+    public <T> FunctionalProperty<T> createFunctionalPropertyShortValue(final Class<?> objectType, final String uniqueIdentifier, final FunctionalPropertyShortValue.Getter<T> getter, final FunctionalPropertyShortValue.Setter<T> setter) {
         return new FunctionalPropertyShortValue<>(objectType, uniqueIdentifier, getter, setter);
     }
 }
