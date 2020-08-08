@@ -81,7 +81,7 @@ Specialized `ObjectProperty` types defined in this library include
 1. `ListBackedProperty`
 
 ## How to use
-You can find more details and examples in the wiki.
+You can find more details and examples in the [wiki](../../wiki).
 
 ## License
 MIT License
