@@ -22,8 +22,15 @@ public class FunctionalPropertyCharValue<ObjectT> extends FunctionalProperty<Obj
     private final Getter<ObjectT> getter;
     private final Setter<ObjectT> setter;
 
+    /**
+     * The boxed value returned by {@link #get(Object)} when the bean is null.
+     * Kept as a constant so every call returns the same instance (identity-consistent
+     * with {@link #getChar(Object)} which returns the primitive {@code 0}).
+     */
+    private static final Character NULL_BEAN_VALUE = Character.valueOf((char) 0);
+
     protected FunctionalPropertyCharValue(final Class<?> objectType, final String uniqueIdentifier, final Getter<ObjectT> getter, final Setter<ObjectT> setter) {
-        super(objectType, char.class, uniqueIdentifier, getter != null, setter != null);
+        super(objectType, Character.TYPE, uniqueIdentifier, getter != null, setter != null);
         this.getter = getter;
         this.setter = setter;
     }
@@ -32,7 +39,7 @@ public class FunctionalPropertyCharValue<ObjectT> extends FunctionalProperty<Obj
     public <ValueT> ValueT get(final ObjectT bean) {
         throwIfNotAccessible(bean, true);
         if (bean == null) {
-            return null;
+            return (ValueT) NULL_BEAN_VALUE;
         }
         final Object result = getter.get(bean);
         return (ValueT) result;

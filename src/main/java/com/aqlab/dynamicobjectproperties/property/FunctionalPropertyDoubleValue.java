@@ -22,8 +22,18 @@ public class FunctionalPropertyDoubleValue<ObjectT> extends FunctionalProperty<O
     private final Getter<ObjectT> getter;
     private final Setter<ObjectT> setter;
 
+    /**
+     * The boxed value returned by {@link #get(Object)} when the bean is null.
+     * <p>
+     * {@link Double#valueOf(double)} does NOT cache instances (unlike the integer box types),
+     * so every call would allocate a new Double. Keeping a constant guarantees every call
+     * returns the same instance and avoids the allocation. It is also identity-consistent
+     * with {@link #getDouble(Object)} which returns the primitive {@code 0d}.
+     */
+    private static final Double NULL_BEAN_VALUE = Double.valueOf(0d);
+
     protected FunctionalPropertyDoubleValue(final Class<?> objectType, final String uniqueIdentifier, final Getter<ObjectT> getter, final Setter<ObjectT> setter) {
-        super(objectType, double.class, uniqueIdentifier, getter != null, setter != null);
+        super(objectType, Double.TYPE, uniqueIdentifier, getter != null, setter != null);
         this.getter = getter;
         this.setter = setter;
     }
@@ -32,7 +42,7 @@ public class FunctionalPropertyDoubleValue<ObjectT> extends FunctionalProperty<O
     public <ValueT> ValueT get(final ObjectT bean) {
         throwIfNotAccessible(bean, true);
         if (bean == null) {
-            return null;
+            return (ValueT) NULL_BEAN_VALUE;
         }
         final Object result = getter.get(bean);
         return (ValueT) result;

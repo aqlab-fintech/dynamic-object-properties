@@ -22,8 +22,18 @@ public class FunctionalPropertyFloatValue<ObjectT> extends FunctionalProperty<Ob
     private final Getter<ObjectT> getter;
     private final Setter<ObjectT> setter;
 
+    /**
+     * The boxed value returned by {@link #get(Object)} when the bean is null.
+     * <p>
+     * {@link Float#valueOf(float)} does NOT cache instances (unlike the integer box types),
+     * so every call would allocate a new Float. Keeping a constant guarantees every call
+     * returns the same instance and avoids the allocation. It is also identity-consistent
+     * with {@link #getFloat(Object)} which returns the primitive {@code 0f}.
+     */
+    private static final Float NULL_BEAN_VALUE = Float.valueOf(0f);
+
     protected FunctionalPropertyFloatValue(final Class<?> objectType, final String uniqueIdentifier, final Getter<ObjectT> getter, final Setter<ObjectT> setter) {
-        super(objectType, float.class, uniqueIdentifier, getter != null, setter != null);
+        super(objectType, Float.TYPE, uniqueIdentifier, getter != null, setter != null);
         this.getter = getter;
         this.setter = setter;
     }
@@ -32,7 +42,7 @@ public class FunctionalPropertyFloatValue<ObjectT> extends FunctionalProperty<Ob
     public <ValueT> ValueT get(final ObjectT bean) {
         throwIfNotAccessible(bean, true);
         if (bean == null) {
-            return null;
+            return (ValueT) NULL_BEAN_VALUE;
         }
         final Object result = getter.get(bean);
         return (ValueT) result;

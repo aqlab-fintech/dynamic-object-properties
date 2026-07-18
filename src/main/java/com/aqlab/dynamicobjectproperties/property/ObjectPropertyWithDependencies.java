@@ -31,26 +31,26 @@ public abstract class ObjectPropertyWithDependencies<ObjectT> extends AbstractOb
     public abstract List<ObjectProperty<?>> getDependents();
 
     /**
-     * Get a set of dependents recursively. The set do not contains any duplicate by definition.
+     * Get a set of dependents recursively. The set does not contain any duplicate by definition.
      *
      * @return the set of dependents and nested dependents
      */
     public Set<ObjectProperty<?>> getNestedDependents() {
-        return breathFirstSearch(null);
+        return breadthFirstSearch(null);
     }
 
     /**
-     * Get a set of dependents recursively. Intemediate dependents (i.e. instanceof {@link ObjectPropertyWithDependencies} are excluded.
+     * Get a set of dependents recursively. Intermediate dependents (i.e. instanceof {@link ObjectPropertyWithDependencies} are excluded.
      * <p>
-     * The set do not contains any duplicate by definition.
+     * The set does not contain any duplicate by definition.
      *
      * @return the set of dependents and nested dependents
      */
     public Set<ObjectProperty<?>> getRootDependents() {
-        return breathFirstSearch(p -> !(p instanceof ObjectPropertyWithDependencies));
+        return breadthFirstSearch(p -> !(p instanceof ObjectPropertyWithDependencies));
     }
 
-    private Set<ObjectProperty<?>> breathFirstSearch(final Predicate<ObjectProperty<?>> filter) {
+    private Set<ObjectProperty<?>> breadthFirstSearch(final Predicate<ObjectProperty<?>> filter) {
         final List<ObjectProperty<?>> queue = new ArrayList<>(getDependents());
         final Set<ObjectProperty<?>> visited = new HashSet<>();
         final Set<ObjectProperty<?>> result = new HashSet<>();
@@ -64,7 +64,10 @@ public abstract class ObjectPropertyWithDependencies<ObjectT> extends AbstractOb
             visited.add(current);
 
             if (current instanceof ObjectPropertyWithDependencies) {
-                ((ObjectPropertyWithDependencies<?>) current).getDependents().stream().filter(visited::contains).forEach(queue::add);
+                ((ObjectPropertyWithDependencies<?>) current).getDependents().stream()
+                        .filter(p -> !visited.contains(p))
+                        .filter(p -> !queue.contains(p))
+                        .forEach(queue::add);
             }
         }
 

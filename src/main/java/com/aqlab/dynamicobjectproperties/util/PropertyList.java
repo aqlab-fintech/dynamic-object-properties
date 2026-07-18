@@ -43,6 +43,7 @@ class PropertyList<ObjectT> extends AbstractList<Object> {
     private class PropertyListListIterator implements ListIterator<Object> {
 
         private ListIterator<ObjectProperty<ObjectT>> backingIterator;
+        private ObjectProperty<ObjectT> lastReturned;
 
         public PropertyListListIterator(final ListIterator<ObjectProperty<ObjectT>> backingIterator) {
             this.backingIterator = backingIterator;
@@ -56,6 +57,7 @@ class PropertyList<ObjectT> extends AbstractList<Object> {
         @Override
         public Object next() {
             final ObjectProperty<ObjectT> property = backingIterator.next();
+            lastReturned = property;
             return property.get(targetObject);
         }
 
@@ -67,6 +69,7 @@ class PropertyList<ObjectT> extends AbstractList<Object> {
         @Override
         public Object previous() {
             final ObjectProperty<ObjectT> property = backingIterator.previous();
+            lastReturned = property;
             return property.get(targetObject);
         }
 
@@ -87,7 +90,10 @@ class PropertyList<ObjectT> extends AbstractList<Object> {
 
         @Override
         public void set(final Object o) {
-            PropertyList.this.set(nextIndex(), o);
+            if (lastReturned == null) {
+                throw new IllegalStateException("next() or previous() must be called before set()");
+            }
+            lastReturned.set(targetObject, o);
         }
 
         @Override

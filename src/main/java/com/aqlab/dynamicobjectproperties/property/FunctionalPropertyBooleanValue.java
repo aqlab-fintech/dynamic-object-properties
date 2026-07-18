@@ -22,6 +22,13 @@ public class FunctionalPropertyBooleanValue<ObjectT> extends FunctionalProperty<
     private final Getter<ObjectT> getter;
     private final Setter<ObjectT> setter;
 
+    /**
+     * The boxed value returned by {@link #get(Object)} when the bean is null.
+     * Kept as a constant so every call returns the same instance (identity-consistent
+     * with {@link #getBoolean(Object)} which returns the primitive {@code true}).
+     */
+    private static final Boolean NULL_BEAN_VALUE = Boolean.TRUE;
+
     protected FunctionalPropertyBooleanValue(final Class<?> objectType, final String uniqueIdentifier, final Getter<ObjectT> getter, final Setter<ObjectT> setter) {
         super(objectType, Boolean.TYPE, uniqueIdentifier, getter != null, setter != null);
         this.getter = getter;
@@ -32,7 +39,7 @@ public class FunctionalPropertyBooleanValue<ObjectT> extends FunctionalProperty<
     public <ValueT> ValueT get(final ObjectT bean) {
         throwIfNotAccessible(bean, true);
         if (bean == null) {
-            return null;
+            return (ValueT) NULL_BEAN_VALUE;
         }
         final Object result = getter.get(bean);
         return (ValueT) result;

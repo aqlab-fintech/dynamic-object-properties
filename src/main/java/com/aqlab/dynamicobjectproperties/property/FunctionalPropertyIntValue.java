@@ -22,6 +22,13 @@ public class FunctionalPropertyIntValue<ObjectT> extends FunctionalProperty<Obje
     private final Getter<ObjectT> getter;
     private final Setter<ObjectT> setter;
 
+    /**
+     * The boxed value returned by {@link #get(Object)} when the bean is null.
+     * Kept as a constant so every call returns the same instance (identity-consistent
+     * with {@link #getInt(Object)} which returns the primitive {@code 0}).
+     */
+    private static final Integer NULL_BEAN_VALUE = Integer.valueOf(0);
+
     protected FunctionalPropertyIntValue(final Class<?> objectType, final String uniqueIdentifier, final Getter<ObjectT> getter, final Setter<ObjectT> setter) {
         super(objectType, int.class, uniqueIdentifier, getter != null, setter != null);
         this.getter = getter;
@@ -32,7 +39,7 @@ public class FunctionalPropertyIntValue<ObjectT> extends FunctionalProperty<Obje
     public <ValueT> ValueT get(final ObjectT bean) {
         throwIfNotAccessible(bean, true);
         if (bean == null) {
-            return null;
+            return (ValueT) NULL_BEAN_VALUE;
         }
         final Object result = getter.get(bean);
         return (ValueT) result;

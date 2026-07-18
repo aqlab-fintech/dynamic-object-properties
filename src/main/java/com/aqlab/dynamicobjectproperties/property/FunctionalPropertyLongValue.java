@@ -22,8 +22,15 @@ public class FunctionalPropertyLongValue<ObjectT> extends FunctionalProperty<Obj
     private final Getter<ObjectT> getter;
     private final Setter<ObjectT> setter;
 
+    /**
+     * The boxed value returned by {@link #get(Object)} when the bean is null.
+     * Kept as a constant so every call returns the same instance (identity-consistent
+     * with {@link #getLong(Object)} which returns the primitive {@code 0L}).
+     */
+    private static final Long NULL_BEAN_VALUE = Long.valueOf(0L);
+
     protected FunctionalPropertyLongValue(final Class<?> objectType, final String uniqueIdentifier, final Getter<ObjectT> getter, final Setter<ObjectT> setter) {
-        super(objectType, long.class, uniqueIdentifier, getter != null, setter != null);
+        super(objectType, Long.TYPE, uniqueIdentifier, getter != null, setter != null);
         this.getter = getter;
         this.setter = setter;
     }
@@ -32,7 +39,7 @@ public class FunctionalPropertyLongValue<ObjectT> extends FunctionalProperty<Obj
     public <ValueT> ValueT get(final ObjectT bean) {
         throwIfNotAccessible(bean, true);
         if (bean == null) {
-            return null;
+            return (ValueT) NULL_BEAN_VALUE;
         }
         final Object result = getter.get(bean);
         return (ValueT) result;

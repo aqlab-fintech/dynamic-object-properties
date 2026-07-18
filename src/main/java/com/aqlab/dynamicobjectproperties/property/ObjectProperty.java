@@ -52,7 +52,7 @@ public interface ObjectProperty<ObjectT> {
 
     /**
      * The char primitive getter in order to avoid boxing/unboxing. Only implemented if
-     * this property is a primitive byte and the property is readable. Exception is thrown otherwise.
+     * this property is a primitive char and the property is readable. Exception is thrown otherwise.
      *
      * @param bean the instance
      * @return the property value
@@ -75,7 +75,7 @@ public interface ObjectProperty<ObjectT> {
 
     /**
      * The short primitive getter in order to avoid boxing/unboxing. Only implemented if
-     * this property is a primitive byte and the property is readable. Exception is thrown otherwise.
+     * this property is a primitive short and the property is readable. Exception is thrown otherwise.
      *
      * @param bean the instance
      * @return the property value
@@ -98,7 +98,7 @@ public interface ObjectProperty<ObjectT> {
 
     /**
      * The int primitive getter in order to avoid boxing/unboxing. Only implemented if
-     * this property is a primitive byte and the property is readable. Exception is thrown otherwise.
+     * this property is a primitive int and the property is readable. Exception is thrown otherwise.
      *
      * @param bean the instance
      * @return the property value
@@ -121,7 +121,7 @@ public interface ObjectProperty<ObjectT> {
 
     /**
      * The long primitive getter in order to avoid boxing/unboxing. Only implemented if
-     * this property is a primitive byte and the property is readable. Exception is thrown otherwise.
+     * this property is a primitive long and the property is readable. Exception is thrown otherwise.
      *
      * @param bean the instance
      * @return the property value
@@ -142,6 +142,13 @@ public interface ObjectProperty<ObjectT> {
         return false;
     }
 
+    /**
+     * The float primitive getter in order to avoid boxing/unboxing. Only implemented if
+     * this property is a primitive float and the property is readable. Exception is thrown otherwise.
+     *
+     * @param bean the instance
+     * @return the property value
+     */
     default float getFloat(final ObjectT bean) {
         if (!canGetFloat()) {
             throw new UnsupportedOperationException("not implemented");
@@ -160,7 +167,7 @@ public interface ObjectProperty<ObjectT> {
 
     /**
      * The double primitive getter in order to avoid boxing/unboxing. Only implemented if
-     * this property is a primitive byte and the property is readable. Exception is thrown otherwise.
+     * this property is a primitive double and the property is readable. Exception is thrown otherwise.
      *
      * @param bean the instance
      * @return the property value
@@ -183,7 +190,7 @@ public interface ObjectProperty<ObjectT> {
 
     /**
      * The boolean primitive getter in order to avoid boxing/unboxing. Only implemented if
-     * this property is a primitive byte and the property is readable. Exception is thrown otherwise.
+     * this property is a primitive boolean and the property is readable. Exception is thrown otherwise.
      *
      * @param bean the instance
      * @return the property value
@@ -239,7 +246,7 @@ public interface ObjectProperty<ObjectT> {
 
     /**
      * The char primitive setter in order to avoid boxing/unboxing. Only implemented if
-     * this property is a primitive byte and the property is writable. Exception is thrown otherwise.
+     * this property is a primitive char and the property is writable. Exception is thrown otherwise.
      *
      * @param bean  the instance
      * @param value the property value to set
@@ -261,7 +268,7 @@ public interface ObjectProperty<ObjectT> {
 
     /**
      * The short primitive setter in order to avoid boxing/unboxing. Only implemented if
-     * this property is a primitive byte and the property is writable. Exception is thrown otherwise.
+     * this property is a primitive short and the property is writable. Exception is thrown otherwise.
      *
      * @param bean  the instance
      * @param value the property value to set
@@ -283,7 +290,7 @@ public interface ObjectProperty<ObjectT> {
 
     /**
      * The int primitive setter in order to avoid boxing/unboxing. Only implemented if
-     * this property is a primitive byte and the property is writable. Exception is thrown otherwise.
+     * this property is a primitive int and the property is writable. Exception is thrown otherwise.
      *
      * @param bean  the instance
      * @param value the property value to set
@@ -305,7 +312,7 @@ public interface ObjectProperty<ObjectT> {
 
     /**
      * The long primitive setter in order to avoid boxing/unboxing. Only implemented if
-     * this property is a primitive byte and the property is writable. Exception is thrown otherwise.
+     * this property is a primitive long and the property is writable. Exception is thrown otherwise.
      *
      * @param bean  the instance
      * @param value the property value to set
@@ -327,7 +334,7 @@ public interface ObjectProperty<ObjectT> {
 
     /**
      * The float primitive setter in order to avoid boxing/unboxing. Only implemented if
-     * this property is a primitive byte and the property is writable. Exception is thrown otherwise.
+     * this property is a primitive float and the property is writable. Exception is thrown otherwise.
      *
      * @param bean  the instance
      * @param value the property value to set
@@ -349,7 +356,7 @@ public interface ObjectProperty<ObjectT> {
 
     /**
      * The double primitive setter in order to avoid boxing/unboxing. Only implemented if
-     * this property is a primitive byte and the property is writable. Exception is thrown otherwise.
+     * this property is a primitive double and the property is writable. Exception is thrown otherwise.
      *
      * @param bean  the instance
      * @param value the property value to set
@@ -371,7 +378,7 @@ public interface ObjectProperty<ObjectT> {
 
     /**
      * The boolean primitive setter in order to avoid boxing/unboxing. Only implemented if
-     * this property is a primitive byte and the property is writable. Exception is thrown otherwise.
+     * this property is a primitive boolean and the property is writable. Exception is thrown otherwise.
      *
      * @param bean  the instance
      * @param value the property value to set
@@ -436,4 +443,5 @@ public interface ObjectProperty<ObjectT> {
         return (ObjectProperty<T>) this;
     }
 }
+
 

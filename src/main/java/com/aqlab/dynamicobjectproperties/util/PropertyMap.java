@@ -51,7 +51,7 @@ class PropertyMap<ObjectT> implements Map<String, Object> {
     @Nullable
     @Override
     public Object put(final String s, final Object o) {
-        final ObjectProperty<ObjectT> p = propertiesMap.get(o);
+        final ObjectProperty<ObjectT> p = propertiesMap.get(s);
         if (p == null) {
             throw new IllegalArgumentException(String.format("%s: key does not exist", s));
         }

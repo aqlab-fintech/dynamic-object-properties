@@ -99,23 +99,23 @@ public class BeanPropertySourceGenerator {
         final String propertyName = propertyDescriptor.getName();
         final String objectTypeName = formatClassNameForSource(objectType);
         final String valueTypeName = formatClassNameForSource(valueType);
-        final String delegateTypeSufix;
+        final String delegateTypeSuffix;
         final String valueTypeNameConstructorArgFormatted;
         if (valueType.isPrimitive()) {
             valueTypeNameConstructorArgFormatted = "";
-            delegateTypeSufix = valueTypeName.substring(0, 1).toUpperCase() + valueTypeName.substring(1) + "Value";
+            delegateTypeSuffix = valueTypeName.substring(0, 1).toUpperCase() + valueTypeName.substring(1) + "Value";
         } else {
             valueTypeNameConstructorArgFormatted = valueTypeName + ".class, ";
-            delegateTypeSufix = "ObjectValue";
+            delegateTypeSuffix = "ObjectValue";
         }
 
         targetClassSource = String.format(CLASS_FRAME,
                 "package " + targetPackageName, // package
                 targetClassName, objectTypeName, // class definition
-                FunctionalProperty.class.getName() + delegateTypeSufix, objectTypeName, propertyDescriptor.getReadMethod() == null ? NULL_STRING : String.format(GETTER_TEMPLATE, propertyDescriptor.getReadMethod().getName()), // isReadable
-                FunctionalProperty.class.getName() + delegateTypeSufix, objectTypeName, propertyDescriptor.getWriteMethod() == null ? NULL_STRING : String.format(SETTER_TEMPLATE, propertyDescriptor.getWriteMethod().getName(), valueTypeName), // isWritable
+                FunctionalProperty.class.getName() + delegateTypeSuffix, objectTypeName, propertyDescriptor.getReadMethod() == null ? NULL_STRING : String.format(GETTER_TEMPLATE, propertyDescriptor.getReadMethod().getName()), // isReadable
+                FunctionalProperty.class.getName() + delegateTypeSuffix, objectTypeName, propertyDescriptor.getWriteMethod() == null ? NULL_STRING : String.format(SETTER_TEMPLATE, propertyDescriptor.getWriteMethod().getName(), valueTypeName), // isWritable
                 targetClassName, // constructor
-                delegateTypeSufix, objectTypeName, valueTypeNameConstructorArgFormatted, uniqueIdentifier, propertyName); // constructor of delegate
+                delegateTypeSuffix, objectTypeName, valueTypeNameConstructorArgFormatted, uniqueIdentifier, propertyName); // constructor of delegate
     }
 
 }

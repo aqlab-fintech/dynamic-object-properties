@@ -9,7 +9,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Methods which utilizes the Dynamic Object Properies (DOP) framework
+ * Methods which utilize the Dynamic Object Properties (DOP) framework
  */
 public final class ObjectPropertyUtils {
     private ObjectPropertyUtils() {
