@@ -1,0 +1,2 @@
+Error: Could not find or load main class src.main.java.com.aqlab.dynamicobjectproperties.examples.PerformanceBenchmarkExample
+Caused by: java.lang.ClassNotFoundException: src.main.java.com.aqlab.dynamicobjectproperties.examples.PerformanceBenchmarkExample
