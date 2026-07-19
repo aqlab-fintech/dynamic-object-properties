@@ -3,3 +3,9 @@
 .idea
 # Ignore Gradle build output directory
 build
+lib
+gradle/
+gradlew*
+
+# Claude context file
+CLAUDE.md

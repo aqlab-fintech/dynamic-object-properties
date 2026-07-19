@@ -20,8 +20,9 @@ public abstract class BeanProperty<ObjectT> implements ObjectProperty<ObjectT> {
     private final String propertyName;
 
     protected BeanProperty(final FunctionalProperty<ObjectT> delegate, final String propertyName) {
-        if (BeanPropertyFactory.GENERATED_CLASSES_LOADER != getClass().getClassLoader()) {
-            // only allow subclasses from BeanPropertyFactory
+        if (BeanPropertyFactory.GENERATED_CLASSES_LOADER != getClass().getClassLoader()
+                && getClass().getClassLoader() != BeanPropertyFactory.class.getClassLoader()) {
+            // only allow subclasses from BeanPropertyFactory or app classloader (for MethodHandle impls)
             throw new IllegalArgumentException("invalid class loader");
         }
         this.delegate = delegate;

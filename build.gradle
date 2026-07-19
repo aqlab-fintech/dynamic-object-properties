@@ -17,6 +17,23 @@ sourceSets {
     }
 }
 
+task compileExamples(type: JavaCompile) {
+    source = sourceSets.examples.java
+    classpath = sourceSets.examples.compileClasspath
+    destinationDirectory = file("${buildDir}/classes/java/examples")
+}
+
+build.dependsOn compileExamples
+
+task runPerformanceBenchmark(type: JavaExec) {
+    group = 'examples'
+    description = 'Runs the PerformanceBenchmarkExample'
+    mainClass = 'com.aqlab.dynamicobjectproperties.PerformanceBenchmarkExample'
+    classpath = sourceSets.examples.runtimeClasspath
+    // Use JDK 11 for runtime code generation (JDK 21 URLClassLoader + module system breaks dynamic class loading)
+    executable = '/opt/data/home/jdk11/bin/java'
+}
+
 dependencies {
     implementation 'com.google.guava:guava:30.1.1-jre'
     implementation 'org.slf4j:slf4j-api:1.7.30'
@@ -38,5 +55,4 @@ javadoc {
     source = sourceSets.main.allJava
     classpath = sourceSets.main.runtimeClasspath
 }
-
 

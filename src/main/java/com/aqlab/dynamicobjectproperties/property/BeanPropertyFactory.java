@@ -1,16 +1,16 @@
 package com.aqlab.dynamicobjectproperties.property;
 
-import com.google.common.base.Charsets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.StandardJavaFileManager;
 import javax.tools.ToolProvider;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -130,13 +130,21 @@ public class BeanPropertyFactory {
         sourceFile.getParentFile().mkdirs();
         Files.write(sourceFile.toPath(), source.getBytes());
 
-        try (final ByteArrayOutputStream sout = new ByteArrayOutputStream();
-             final ByteArrayOutputStream serr = new ByteArrayOutputStream()) {
-            if (CACHED_COMPILER.run(null, sout, serr, sourceFile.getPath()) != 0) {
-                sout.flush();
-                serr.flush();
-                LOGGER.info(new String(sout.toByteArray(), Charsets.UTF_8));
-                LOGGER.error(new String(serr.toByteArray(), Charsets.UTF_8));
+        final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+        try (final StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null)) {
+            final Iterable<? extends JavaFileObject> compilationUnits =
+                    fileManager.getJavaFileObjectsFromFiles(java.util.Collections.singletonList(sourceFile));
+
+            // Build classpath from the JVM's launch classpath (set by Gradle JavaExec)
+            final String classpath = System.getProperty("java.class.path");
+
+            final JavaCompiler.CompilationTask task = compiler.getTask(
+                    null, fileManager, null,
+                    java.util.Arrays.asList("-classpath", classpath.toString()),
+                    null, compilationUnits);
+
+            if (!task.call()) {
+                LOGGER.error("Compilation failed for class {}", className);
             }
         }
 
@@ -189,14 +197,65 @@ public class BeanPropertyFactory {
         }
     }
 
+    private static volatile boolean METHODHANDLE_AVAILABLE = true;
+
     private void registerBeanProperty(final Class<?> objectType, final PropertyDescriptor pd, final Map<String, BeanProperty<?>> propertiesMap)
             throws ClassNotFoundException, IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+
+        BeanProperty<?> bp = null;
+
+        // 1st: MethodHandle (lightest, closest to C# LINQ Compile())
+        if (METHODHANDLE_AVAILABLE) {
+            try {
+                bp = tryRegisterWithMethodHandle(objectType, pd);
+            } catch (final Throwable e) {
+                METHODHANDLE_AVAILABLE = false;
+                LOGGER.warn("MethodHandle registration failed for {}.{}, falling back to javac compilation: {}",
+                        objectType.getSimpleName(), pd.getName(), e.getMessage());
+            }
+        }
+
+        // 2nd: Fallback to javac compilation
+        if (bp == null) {
+            bp = tryRegisterWithJavac(objectType, pd);
+        }
+
+        if (bp != null) {
+            propertiesMap.put(pd.getName(), bp);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <ObjectT> BeanProperty<ObjectT> tryRegisterWithMethodHandle(
+            final Class<?> objectType, final PropertyDescriptor pd) {
+
+        final BeanPropertyMethodHandleGenerator generator =
+                new BeanPropertyMethodHandleGenerator(objectType, pd);
+        final FunctionalProperty<ObjectT> delegate = generator.createDelegate();
+
+        return new MethodHandleBeanProperty<>(
+                objectType,
+                pd.getPropertyType(),
+                pd.getName(),
+                pd.getReadMethod() != null,
+                pd.getWriteMethod() != null,
+                delegate
+        );
+    }
+
+    @SuppressWarnings("unchecked")
+    private <ObjectT> BeanProperty<ObjectT> tryRegisterWithJavac(
+            final Class<?> objectType, final PropertyDescriptor pd)
+            throws ClassNotFoundException, IOException, NoSuchMethodException,
+            InvocationTargetException, InstantiationException, IllegalAccessException {
+
         final BeanPropertySourceGenerator generator = new BeanPropertySourceGenerator(objectType, pd);
         generator.generateClassSource();
         final Class<?> clazz = compileClass(generator.getTargetClassFullName(), generator.getTargetClassSource());
         if (clazz != null) {
             final Constructor<?> constructor = clazz.getConstructor();
-            propertiesMap.put(pd.getName(), (BeanProperty<?>) constructor.newInstance());
+            return (BeanProperty<ObjectT>) constructor.newInstance();
         }
+        return null;
     }
 }
