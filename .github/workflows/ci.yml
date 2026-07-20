@@ -28,6 +28,9 @@ jobs:
       - name: Run tests
         run: ./gradlew test --no-daemon
 
+      - name: Build JAR
+        run: ./gradlew jar --no-daemon
+
       - name: Upload test report
         uses: actions/upload-artifact@v4
         if: always()
@@ -35,3 +38,18 @@ jobs:
           name: test-report
           path: build/reports/tests/test/
           retention-days: 7
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: success() && github.event_name == 'push'
+        with:
+          tag_name: v${{ github.run_number }}
+          name: Build ${{ github.run_number }} — ${{ github.sha }}
+          body: |
+            Auto-generated release from CI pipeline.
+            - Commit: ${{ github.sha }}
+            - Build: ${{ github.run_id }}
+            - Triggered by: ${{ github.actor }}
+          files: build/libs/*.jar
+          generate_release_notes: true
+          fail_on_unmatched_files: false
